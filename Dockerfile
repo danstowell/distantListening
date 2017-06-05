@@ -1,4 +1,5 @@
-FROM continuumio/anaconda3
+#FROM continuumio/anaconda3
+FROM kaixhin/lasagne
 
 RUN apt-get update && apt-get install -qqy \
         pkg-config \
@@ -15,19 +16,21 @@ RUN apt-get update && apt-get install -qqy \
         vim \
 		gstreamer1.0-plugins-base \
         gstreamer1.0-plugins-ugly \
+        ffmpeg \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # TensorFlow
-ENV TENSORFLOW_VERSION 1.0.0
-RUN pip install tensorflow==$TENSORFLOW_VERSION 
+#ENV TENSORFLOW_VERSION 1.0.0
+#RUN pip install tensorflow==$TENSORFLOW_VERSION 
 
 # This tends to break builds at unknown times so don't update
 # RUN conda update conda; conda update --all
 
 # ffmpeg and LibRosa
-RUN conda install -c conda-forge ffmpeg librosa
+#RUN conda install -c conda-forge ffmpeg librosa
+RUN pip install librosa
 
 COPY jupyter_notebook_config.py /root/.jupyter/
 
