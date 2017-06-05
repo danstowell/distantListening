@@ -1,7 +1,7 @@
 #FROM continuumio/anaconda3
 FROM kaixhin/lasagne
 
-RUN apt-get update && apt-get install -qqy \
+RUN apt-get update && apt-get install -y \
         pkg-config \
         build-essential \
         libavcodec-dev \
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -qqy \
         git \
         curl \
         vim \
-		gstreamer1.0-plugins-base \
+        gstreamer1.0-plugins-base \
         gstreamer1.0-plugins-ugly \
         ffmpeg \
         && \
