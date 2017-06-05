@@ -1,6 +1,31 @@
+FROM ubuntu:16.04
 #FROM continuumio/anaconda3
-FROM kaixhin/lasagne
+#FROM kaixhin/lasagne
 
+#############################################################
+# Install bleeding-edge Theano and Lasagne
+# modified from https://github.com/Kaixhin/dockerfiles/blob/master/theano/Dockerfile
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  gfortran \
+  git \
+  wget \
+  liblapack-dev \
+  libopenblas-dev \
+  python-dev \
+  python-pip \
+  python-nose \
+  python-numpy \
+  python-scipy
+
+RUN pip install --upgrade pip
+RUN pip install --upgrade six
+RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git
+RUN pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
+
+
+#############################################################
+# now some more general and audio-specific items
 RUN apt-get update && apt-get install -y \
         pkg-config \
         build-essential \
@@ -16,10 +41,12 @@ RUN apt-get update && apt-get install -y \
         vim \
         gstreamer1.0-plugins-base \
         gstreamer1.0-plugins-ugly \
-        ffmpeg \
+        libav-tools \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN lsb_release -a
 
 # TensorFlow
 #ENV TENSORFLOW_VERSION 1.0.0
@@ -30,7 +57,8 @@ RUN apt-get update && apt-get install -y \
 
 # ffmpeg and LibRosa
 #RUN conda install -c conda-forge ffmpeg librosa
-RUN pip install librosa
+COPY requirements.txt /
+RUN pip install -r requirements.txt
 
 COPY jupyter_notebook_config.py /root/.jupyter/
 
@@ -40,7 +68,7 @@ COPY jupyter_notebook_config.py /root/.jupyter/
 COPY run_jupyter.sh /
 
 # tensorboard
-EXPOSE 6006
+#EXPOSE 6006
 
 # jupyter
 EXPOSE 8888
