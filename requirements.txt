@@ -1,4 +1,0 @@
-ipython
-jupyter
-#TODO librosa
-
