@@ -5,6 +5,6 @@ If you run ./start.sh it should build the image (if needed) and then run it, sta
 
 You can also drop directly to a commandline in a running image by doing:
 
-docker run --rm -it -p 8888:8888 -v $(pwd)/notebooks:/notebooks mclddistant /bin/bash
+docker run --rm -it -p 8888:8888 -v $(pwd)/notebooks:/notebooks mcld/lasagne-notebook /bin/bash
 
 
