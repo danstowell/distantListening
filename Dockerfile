@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 #FROM kaixhin/lasagne
 
 #############################################################
-# Install bleeding-edge Theano and Lasagne
+# Install bleeding-edge Theano and Lasagne, plus all kinds of other stuff
 # modified from https://github.com/Kaixhin/dockerfiles/blob/master/theano/Dockerfile
 RUN apt-get update && apt-get install -y \
   build-essential \
@@ -16,17 +16,8 @@ RUN apt-get update && apt-get install -y \
   python-pip \
   python-nose \
   python-numpy \
-  python-scipy
-
-RUN pip install --upgrade pip
-RUN pip install --upgrade six
-RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git
-RUN pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
-
-
-#############################################################
-# now some more general and audio-specific items
-RUN apt-get update && apt-get install -y \
+  python-scipy \
+        lsb-release \
         pkg-config \
         build-essential \
         libavcodec-dev \
@@ -46,19 +37,24 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN pip install --upgrade pip
+RUN pip install --upgrade six
+RUN pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git
+RUN pip install --upgrade https://github.com/Lasagne/Lasagne/archive/master.zip
+
+#################################################
+
 RUN lsb_release -a
 
 # TensorFlow
 #ENV TENSORFLOW_VERSION 1.0.0
 #RUN pip install tensorflow==$TENSORFLOW_VERSION 
 
-# This tends to break builds at unknown times so don't update
-# RUN conda update conda; conda update --all
-
 # ffmpeg and LibRosa
 #RUN conda install -c conda-forge ffmpeg librosa
 COPY requirements.txt /
 RUN pip install -r requirements.txt
+#RUN pip install --upgrade ipython jupyter
 
 COPY jupyter_notebook_config.py /root/.jupyter/
 
@@ -79,4 +75,4 @@ ENV DISPLAY :0
 
 WORKDIR "/notebooks"
 
-CMD ["sh", "/run_jupyter.sh"]
+CMD ["sh", "/run_jupyter.sh", "spectrogram_autocorrelations"]
